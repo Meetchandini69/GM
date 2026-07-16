@@ -16,8 +16,14 @@ export default defineConfig({
     outDir: 'dist',
   },
   server: {
+<<<<<<< HEAD
     port: 3000,
     host: '0.0.0.0',
+=======
+    port: 5000,
+    host: '0.0.0.0',
+    allowedHosts: true,
+>>>>>>> design
   },
   preview: {
     port: 4173,
