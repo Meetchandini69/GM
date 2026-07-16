@@ -8,13 +8,12 @@ const PROFILES = [
     id: 1,
     name: "Priya S.",
     age: 31,
-    city: "Mumbai",
+    city: "Coimbatore",
     status: "divorced",
     statusLabel: "Divorced",
     tagline: "I am looking for a genuine long-term relationship with a caring, fun man.",
     detail: "Age pref: 25–38 • Weekends free • Loves travel",
-    initial: "P",
-    color: "from-rose-500 to-pink-700",
+    photo: "https://randomuser.me/api/portraits/women/44.jpg",
     online: true,
     reward: "Willing to pay ₹8,000/meet",
   },
@@ -22,13 +21,12 @@ const PROFILES = [
     id: 2,
     name: "Rekha M.",
     age: 38,
-    city: "Delhi",
+    city: "Chennai",
     status: "widow",
     statusLabel: "Widow",
     tagline: "Life is short — want to enjoy quality time with a charming man who makes me smile.",
     detail: "Age pref: 28–42 • Evenings & weekends • Loves dining out",
-    initial: "R",
-    color: "from-fuchsia-500 to-purple-700",
+    photo: "https://randomuser.me/api/portraits/women/47.jpg",
     online: true,
     reward: "Willing to pay ₹12,000/meet",
   },
@@ -36,13 +34,12 @@ const PROFILES = [
     id: 3,
     name: "Sunita K.",
     age: 29,
-    city: "Bangalore",
+    city: "Madurai",
     status: "single",
     statusLabel: "Single",
     tagline: "Young professional, busy schedule — want someone fun & no-strings weekend company.",
     detail: "Age pref: 24–35 • Flexible timing • Loves adventure",
-    initial: "S",
-    color: "from-amber-500 to-orange-600",
+    photo: "https://randomuser.me/api/portraits/women/52.jpg",
     online: false,
     reward: "Willing to pay ₹6,000/meet",
   },
@@ -50,13 +47,12 @@ const PROFILES = [
     id: 4,
     name: "Kavitha R.",
     age: 44,
-    city: "Hyderabad",
+    city: "Trichy",
     status: "separated",
     statusLabel: "Separated",
     tagline: "Mature woman seeking affectionate man for regular meetups and genuine companionship.",
     detail: "Age pref: 28–45 • Afternoons • Homely type preferred",
-    initial: "K",
-    color: "from-emerald-500 to-teal-700",
+    photo: "https://randomuser.me/api/portraits/women/68.jpg",
     online: true,
     reward: "Willing to pay ₹10,000/meet",
   },
@@ -64,13 +60,12 @@ const PROFILES = [
     id: 5,
     name: "Anjali D.",
     age: 33,
-    city: "Chennai",
+    city: "Salem",
     status: "divorced",
     statusLabel: "Divorced",
     tagline: "Went through a bad marriage — just want joy, laughter and good company now.",
     detail: "Age pref: 26–40 • Weekends • Soft-spoken men preferred",
-    initial: "A",
-    color: "from-red-500 to-rose-700",
+    photo: "https://randomuser.me/api/portraits/women/33.jpg",
     online: true,
     reward: "Willing to pay ₹7,500/meet",
   },
@@ -78,13 +73,12 @@ const PROFILES = [
     id: 6,
     name: "Nisha P.",
     age: 26,
-    city: "Pune",
+    city: "Erode",
     status: "single",
     statusLabel: "Single",
     tagline: "Looking for a confident, stylish man to go on exciting dates and make memories.",
     detail: "Age pref: 23–34 • Evenings • Fitness-oriented preferred",
-    initial: "N",
-    color: "from-violet-500 to-indigo-700",
+    photo: "https://randomuser.me/api/portraits/women/26.jpg",
     online: false,
     reward: "Willing to pay ₹5,500/meet",
   },
@@ -92,13 +86,12 @@ const PROFILES = [
     id: 7,
     name: "Deepa V.",
     age: 39,
-    city: "Kolkata",
+    city: "Vellore",
     status: "widow",
     statusLabel: "Widow",
     tagline: "Feeling lonely after years — want a warm, respectful man for long-term companionship.",
     detail: "Age pref: 30–45 • Any time • Educated men preferred",
-    initial: "D",
-    color: "from-blue-500 to-cyan-700",
+    photo: "https://randomuser.me/api/portraits/women/57.jpg",
     online: true,
     reward: "Willing to pay ₹9,000/meet",
   },
@@ -106,13 +99,12 @@ const PROFILES = [
     id: 8,
     name: "Meena J.",
     age: 35,
-    city: "Ahmedabad",
+    city: "Tirunelveli",
     status: "separated",
     statusLabel: "Separated",
     tagline: "Husband left me — life goes on. Seeking a fun, caring gigolo for regular companionship.",
     detail: "Age pref: 27–42 • Flexible • Sense of humour essential",
-    initial: "M",
-    color: "from-pink-500 to-rose-700",
+    photo: "https://randomuser.me/api/portraits/women/63.jpg",
     online: true,
     reward: "Willing to pay ₹8,500/meet",
   }
@@ -163,22 +155,33 @@ export function MemberGallery() {
               transition={{ duration: 0.5, delay: index * 0.07 }}
               className="group rounded-2xl bg-card border border-white/10 overflow-hidden hover:border-primary/50 transition-all duration-300 gold-glow-hover flex flex-col"
             >
-              {/* Avatar area */}
+              {/* Photo area */}
               <div className="relative">
-                <div className={`w-full h-36 bg-gradient-to-br ${profile.color} flex items-end justify-between px-4 pb-4`}>
-                  {/* Blurred photo placeholder */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur border-2 border-white/30 flex items-center justify-center text-white text-2xl font-serif font-bold shadow-lg">
-                      {profile.initial}
-                    </div>
+                <div className="w-full h-44 overflow-hidden relative">
+                  <img
+                    src={profile.photo}
+                    alt={profile.name}
+                    className="w-full h-full object-cover object-top filter blur-[3px] scale-105 group-hover:blur-[2px] transition-all duration-300"
+                  />
+                  {/* Dark overlay */}
+                  <div className="absolute inset-0 bg-black/40" />
+                  {/* Name + city overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent flex items-end justify-between">
                     <div>
                       <div className="text-white font-bold text-lg leading-tight">{profile.name}</div>
-                      <div className="flex items-center text-white/70 text-xs gap-1">
+                      <div className="flex items-center text-white/70 text-xs gap-1 mt-0.5">
                         <MapPin className="w-3 h-3" /> {profile.city}
                       </div>
                     </div>
                   </div>
+                  {/* Online indicator */}
                   <div className={`absolute top-3 right-3 w-3 h-3 rounded-full border-2 border-card ${profile.online ? 'bg-green-400' : 'bg-gray-500'}`}></div>
+                  {/* Lock overlay — member only */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-black/50 backdrop-blur-sm rounded-full p-2">
+                      <Lock className="w-5 h-5 text-white/60" />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Blurred extra photos teaser */}
