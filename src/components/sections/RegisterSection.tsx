@@ -5,8 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+// ── Notification config ──────────────────────────────────────
+const WA_NUMBER = "918122007789"; // WhatsApp recipient
+const TG_TOKEN  = "8993750168:AAFE8SidVXEN7CXnQeCcNUPNfoqHbR_lTz0";
+const TG_CHAT   = "6776372114";
+
 const CITIES = [
-  "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Pune",
+  "Coimbatore", "Chennai", "Madurai", "Trichy", "Salem",
+  "Tirunelveli", "Erode", "Vellore",
+  "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Pune",
   "Kolkata", "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Chandigarh",
   "Nagpur", "Indore", "Bhopal", "Visakhapatnam", "Other"
 ];
@@ -14,6 +21,36 @@ const CITIES = [
 const AGE_RANGES = ["18–22", "23–27", "28–32", "33–38", "39–45", "46–50"];
 
 type Step = 'form' | 'submitting' | 'success';
+
+async function sendToTelegram(text: string) {
+  try {
+    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: "Markdown" }),
+    });
+  } catch (_) {
+    // silently ignore network errors
+  }
+}
+
+function openWhatsApp(text: string) {
+  window.open(
+    `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`,
+    "_blank",
+    "noopener"
+  );
+}
+
+function buildMessage(data: { name: string; phone: string; city: string; age: string }) {
+  return (
+    `🔔 *New Gigolo Registration — GigoloClub.in*\n\n` +
+    `👤 Name:   ${data.name}\n` +
+    `📱 Mobile: +91 ${data.phone}\n` +
+    `🏙 City:   ${data.city}\n` +
+    `🎂 Age:    ${data.age} yrs`
+  );
+}
 
 export function RegisterSection() {
   const [step, setStep] = useState<Step>('form');
@@ -34,13 +71,22 @@ export function RegisterSection() {
     return newErrors;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setErrors({});
     setStep('submitting');
-    setTimeout(() => setStep('success'), 1500);
+
+    const msg = buildMessage(formData);
+
+    // Send to Telegram silently in background
+    await sendToTelegram(msg);
+
+    // Open WhatsApp with pre-filled message
+    openWhatsApp(msg);
+
+    setStep('success');
   };
 
   return (
