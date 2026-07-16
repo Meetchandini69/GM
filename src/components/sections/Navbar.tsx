@@ -63,7 +63,7 @@ export function Navbar() {
             <a href="#" onClick={(e) => { e.preventDefault(); scrollTo('#'); }} className="flex items-center gap-2 group">
               <Crown className="w-6 h-6 text-primary group-hover:scale-110 transition-transform" />
               <span className="font-serif text-xl md:text-2xl font-bold tracking-tight text-white group-hover:text-primary transition-colors">
-                GigoloClub<span className="text-primary">.in</span>
+                GigoloMeet<span className="text-primary">.in</span>
               </span>
             </a>
 

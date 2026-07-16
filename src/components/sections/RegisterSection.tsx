@@ -10,9 +10,9 @@ const CITIES = [
   "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Pune",
 =======
 // ── Notification config ──────────────────────────────────────
-const WA_NUMBER = "918122007789"; // WhatsApp recipient
-const TG_TOKEN  = "8993750168:AAFE8SidVXEN7CXnQeCcNUPNfoqHbR_lTz0";
-const TG_CHAT   = "6776372114";
+const WA_NUMBER = "9150999299"; // WhatsApp recipient
+const TG_TOKEN  = "8683014002:AAFccEginFWvQ-emsjV7wmymlKzDAReV7VI";
+const TG_CHAT   = "8744741027";
 
 const CITIES = [
   "Coimbatore", "Chennai", "Madurai", "Trichy", "Salem",
@@ -51,7 +51,7 @@ function openWhatsApp(text: string) {
 
 function buildMessage(data: { name: string; phone: string; city: string; age: string }) {
   return (
-    `🔔 *New Gigolo Registration — GigoloClub.in*\n\n` +
+    `🔔 *New Gigolo Registration — Gigolomeet.in*\n\n` +
     `👤 Name:   ${data.name}\n` +
     `📱 Mobile: +91 ${data.phone}\n` +
     `🏙 City:   ${data.city}\n` +

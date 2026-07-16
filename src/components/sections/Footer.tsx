@@ -11,7 +11,7 @@ export function Footer() {
             <a href="#" className="flex items-center gap-2 mb-6">
               <Crown className="w-8 h-8 text-primary" />
               <span className="font-serif text-2xl font-bold text-white">
-                GigoloClub<span className="text-primary">.in</span>
+                GigoloMeet<span className="text-primary">.in</span>
               </span>
             </a>
             <p className="text-muted-foreground text-sm mb-6 leading-relaxed">
@@ -77,7 +77,7 @@ export function Footer() {
         <div className="border-t border-white/10 pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
             <p className="text-muted-foreground text-sm flex items-center">
-              &copy; {new Date().getFullYear()} GigoloClub.in. Made with <Heart className="w-4 h-4 text-red-500 mx-1" /> in India.
+              &copy; {new Date().getFullYear()} Gigolomeet.in. Made with <Heart className="w-4 h-4 text-red-500 mx-1" /> in India.
             </p>
             <p className="text-muted-foreground text-xs">
               For adults 18+ only. All activity is legal, consensual, and between willing adults.
@@ -86,7 +86,7 @@ export function Footer() {
 
           <div className="bg-background/50 rounded-lg p-4 border border-white/5">
             <p className="text-[10px] md:text-xs text-gray-500 text-justify leading-relaxed">
-              <strong>DISCLAIMER:</strong> GigoloClub.in is an adult companionship platform intended exclusively for consenting adults aged 18 years and above. All members and profiles on this platform are independent individuals. We act merely as an advertising and connection medium between consenting adults. We do not promote, condone, or facilitate any illegal activities, prostitution, or human trafficking. Users are solely responsible for their communications, interactions, and any arrangements made off the platform. By using this site, you confirm you are 18+ and agree to our Terms of Service and Privacy Policy. If you do not agree, please exit this site immediately.
+              <strong>DISCLAIMER:</strong> Gigolomeet.in is an adult companionship platform intended exclusively for consenting adults aged 18 years and above. All members and profiles on this platform are independent individuals. We act merely as an advertising and connection medium between consenting adults. We do not promote, condone, or facilitate any illegal activities, prostitution, or human trafficking. Users are solely responsible for their communications, interactions, and any arrangements made off the platform. By using this site, you confirm you are 18+ and agree to our Terms of Service and Privacy Policy. If you do not agree, please exit this site immediately.
             </p>
           </div>
         </div>
