@@ -3,7 +3,7 @@ import { Star, Quote } from 'lucide-react';
 
 const TESTIMONIALS = [
   {
-    quote: "I was earning ₹18,000/month at my office job. After joining GigoloClub.in I made ₹65,000 my first month. The women are real, respectful, and generous. Best decision of my life.",
+    quote: "I was earning ₹18,000/month at my office job. After joining Gigolomeet.in I made ₹65,000 my first month. The women are real, respectful, and generous. Best decision of my life.",
     name: "Rohit K.",
     city: "Mumbai",
     earning: "₹65,000 first month",
@@ -47,7 +47,7 @@ export function Testimonials() {
             Real Men, <span className="text-primary">Real Earnings</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            These are genuine success stories from men who joined GigoloClub.in and transformed their income and social life. Names abbreviated for privacy.
+            These are genuine success stories from men who joined Gigolomeet.in and transformed their income and social life. Names abbreviated for privacy.
           </p>
         </div>
 

@@ -1,6 +1,6 @@
-# GigoloClub.in — Landing Page
+# Gigolomeet.in — Landing Page
 
-Dark-luxury landing page for **GigoloClub.in**, India's gigolo job platform.  
+Dark-luxury landing page for **Gigolomeet.in**, India's gigolo job platform.  
 Targets men seeking gigolo jobs — showcasing women profiles, earnings (₹50K–₹2L/month), and driving male registration.
 
 ## Tech Stack

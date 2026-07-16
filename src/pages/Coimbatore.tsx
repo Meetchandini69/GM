@@ -187,7 +187,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 /* ─────────────────────────── page ─────────────────────────── */
 export default function Coimbatore() {
   useEffect(() => {
-    document.title = "Gigolo Service in Coimbatore | Call Boy & Male Escort Jobs — GigoloClub.in";
+    document.title = "Gigolo Service in Coimbatore | Call Boy & Male Escort Jobs — Gigolomeet.in";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       metaDescription.setAttribute(
@@ -289,7 +289,7 @@ export default function Coimbatore() {
                 Women in <span className="text-primary">Coimbatore</span> Waiting Right Now
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                These women posted profiles on GigoloClub.in looking for a gigolo in Coimbatore. Register free to see their full contact.
+                These women posted profiles on Gigolomeet.in looking for a gigolo in Coimbatore. Register free to see their full contact.
               </p>
             </div>
             <div className="flex justify-center mb-10">
@@ -371,7 +371,7 @@ export default function Coimbatore() {
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-                Why Choose <span className="text-primary">GigoloClub.in</span> in Coimbatore?
+                Why Choose <span className="text-primary">Gigolomeet.in</span> in Coimbatore?
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 When seeking male escort services or exploring call boy jobs in Coimbatore, choosing the right platform is paramount. Here's why we stand out as the premier choice.
@@ -555,9 +555,9 @@ export default function Coimbatore() {
             <div className="grid md:grid-cols-2 gap-8 text-muted-foreground text-sm leading-relaxed">
               <div>
                 <h3 className="text-white font-semibold text-base mb-3">What is a Gigolo Job in Coimbatore?</h3>
-                <p className="mb-5">A gigolo in Coimbatore is a male companion who meets lonely, divorced, widowed or single women for paid companionship. GigoloClub.in connects verified men with women across RS Puram, Gandhipuram, Peelamedu and other areas who seek genuine company and are willing to pay ₹5,000–₹20,000 per meeting.</p>
+                <p className="mb-5">A gigolo in Coimbatore is a male companion who meets lonely, divorced, widowed or single women for paid companionship. Gigolomeet.in connects verified men with women across RS Puram, Gandhipuram, Peelamedu and other areas who seek genuine company and are willing to pay ₹5,000–₹20,000 per meeting.</p>
                 <h3 className="text-white font-semibold text-base mb-3">Call Boy Jobs in Coimbatore</h3>
-                <p>Call boy and playboy jobs in Coimbatore are in high demand. Many women — especially professionals, divorced women and widows in areas like Saibaba Colony and Avinashi Road — are looking for discreet, paid male companionship through trusted platforms like GigoloClub.in.</p>
+                <p>Call boy and playboy jobs in Coimbatore are in high demand. Many women — especially professionals, divorced women and widows in areas like Saibaba Colony and Avinashi Road — are looking for discreet, paid male companionship through trusted platforms like Gigolomeet.in.</p>
               </div>
               <div>
                 <h3 className="text-white font-semibold text-base mb-3">Male Escort Jobs — Coimbatore</h3>

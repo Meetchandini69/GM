@@ -44,7 +44,7 @@ export function WhyChooseUs() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-            Why Join <span className="text-primary border-b-2 border-primary pb-1">GigoloClub.in?</span>
+            Why Join <span className="text-primary border-b-2 border-primary pb-1">Gigolomeet.in?</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto mt-6">
             Thousands of Indian men have already changed their lives by joining us. Here's exactly what you get when you register as a Gigolo.

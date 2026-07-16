@@ -9,7 +9,7 @@ import {
 const FAQS = [
   {
     question: "What exactly is a Gigolo job?",
-    answer: "A Gigolo is a man who provides companionship, emotional support, and social company to women in exchange for money. This includes activities like dinner dates, travel, outings, and private companionship. It is adult, consensual, and completely between two willing individuals. GigoloClub.in simply connects them."
+    answer: "A Gigolo is a man who provides companionship, emotional support, and social company to women in exchange for money. This includes activities like dinner dates, travel, outings, and private companionship. It is adult, consensual, and completely between two willing individuals. Gigolomeet.in simply connects them."
   },
   {
     question: "How much can I earn as a Gigolo?",
