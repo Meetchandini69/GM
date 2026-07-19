@@ -5,20 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-<<<<<<< HEAD
-const CITIES = [
-  "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Pune",
-=======
-// ── Notification config ──────────────────────────────────────
-const WA_NUMBER = "9150999299"; // WhatsApp recipient
-const TG_TOKEN  = "8683014002:AAFccEginFWvQ-emsjV7wmymlKzDAReV7VI";
-const TG_CHAT   = "8744741027";
-
 const CITIES = [
   "Coimbatore", "Chennai", "Madurai", "Trichy", "Salem",
   "Tirunelveli", "Erode", "Vellore",
   "Mumbai", "Delhi", "Bangalore", "Hyderabad", "Pune",
->>>>>>> design
   "Kolkata", "Ahmedabad", "Jaipur", "Surat", "Lucknow", "Chandigarh",
   "Nagpur", "Indore", "Bhopal", "Visakhapatnam", "Other"
 ];
@@ -27,47 +17,9 @@ const AGE_RANGES = ["18–22", "23–27", "28–32", "33–38", "39–45", "46�
 
 type Step = 'form' | 'submitting' | 'success';
 
-<<<<<<< HEAD
-=======
-async function sendToTelegram(text: string) {
-  try {
-    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: TG_CHAT, text, parse_mode: "Markdown" }),
-    });
-  } catch (_) {
-    // silently ignore network errors
-  }
-}
-
-function openWhatsApp(text: string) {
-  window.open(
-    `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`,
-    "_blank",
-    "noopener"
-  );
-}
-
-function buildMessage(data: { name: string; phone: string; city: string; age: string }) {
-  return (
-    `🔔 *New Gigolo Registration — Gigolomeet.in*\n\n` +
-    `👤 Name:   ${data.name}\n` +
-    `📱 Mobile: +91 ${data.phone}\n` +
-    `🏙 City:   ${data.city}\n` +
-    `🎂 Age:    ${data.age} yrs`
-  );
-}
-
->>>>>>> design
 export function RegisterSection() {
   const [step, setStep] = useState<Step>('form');
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    city: '',
-    age: '',
-  });
+  const [formData, setFormData] = useState({ name: '', phone: '', city: '', age: '' });
   const [errors, setErrors] = useState<Partial<typeof formData>>({});
 
   const validate = () => {
@@ -79,36 +31,42 @@ export function RegisterSection() {
     return newErrors;
   };
 
-<<<<<<< HEAD
-  const handleSubmit = (e: React.FormEvent) => {
-=======
   const handleSubmit = async (e: React.FormEvent) => {
->>>>>>> design
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setErrors({});
     setStep('submitting');
-<<<<<<< HEAD
-    setTimeout(() => setStep('success'), 1500);
-=======
 
-    const msg = buildMessage(formData);
-
-    // Send to Telegram silently in background
-    await sendToTelegram(msg);
-
-    // Open WhatsApp with pre-filled message
-    openWhatsApp(msg);
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          mobile: formData.phone,
+          city: formData.city,
+          age: formData.age,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setErrors({ name: data.error || 'Registration failed. Please try again.' });
+        setStep('form');
+        return;
+      }
+    } catch {
+      setErrors({ name: 'Network error. Please check your connection and try again.' });
+      setStep('form');
+      return;
+    }
 
     setStep('success');
->>>>>>> design
   };
 
   return (
     <section id="register" className="py-24 relative overflow-hidden bg-card border-t border-white/5">
-      {/* Background glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-primary/10 via-background/0 to-background/0 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-primary/10 via-background/0 to-background/0 pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="max-w-5xl mx-auto">
@@ -117,7 +75,7 @@ export function RegisterSection() {
             {/* Left — copy */}
             <div className="lg:w-5/12 text-center lg:text-left">
               <div className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary mb-6">
-                <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse"></span>
+                <span className="flex h-2 w-2 rounded-full bg-primary mr-2 animate-pulse" />
                 Free Registration — Takes 2 Minutes
               </div>
               <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6 leading-tight">
@@ -126,7 +84,6 @@ export function RegisterSection() {
               <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
                 Register now and get your profile live within 24 hours. Women in your city will start sending meeting requests immediately.
               </p>
-
               <ul className="space-y-4 mb-8">
                 {[
                   { icon: IndianRupee, text: "Earn ₹5,000–₹20,000 per meeting" },
@@ -142,8 +99,6 @@ export function RegisterSection() {
                   </li>
                 ))}
               </ul>
-
-              {/* Social proof */}
               <div className="flex items-center gap-3 p-4 bg-background rounded-xl border border-white/10">
                 <div className="flex -space-x-2">
                   {['from-rose-500 to-pink-700', 'from-blue-500 to-indigo-700', 'from-emerald-500 to-teal-700', 'from-amber-500 to-orange-600'].map((c, i) => (
@@ -180,9 +135,9 @@ export function RegisterSection() {
                     <div className="bg-primary/10 border border-primary/20 rounded-xl p-5 w-full text-left">
                       <p className="text-primary font-semibold text-sm mb-2">✅ Next Steps:</p>
                       <ol className="text-muted-foreground text-sm space-y-1.5 list-decimal list-inside">
-                        <li>Check your mobile for a verification SMS</li>
-                        <li>Complete your profile with a photo</li>
-                        <li>Go live and start receiving meeting requests</li>
+                        <li>Check your mobile for login credentials (within 24 hrs)</li>
+                        <li>Complete your full profile after logging in</li>
+                        <li>Submit for review and go live</li>
                       </ol>
                     </div>
                   </motion.div>
@@ -197,7 +152,6 @@ export function RegisterSection() {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-                      {/* Name */}
                       <div>
                         <label className="block text-sm font-medium text-white mb-2">Your Name *</label>
                         <Input
@@ -209,7 +163,6 @@ export function RegisterSection() {
                         {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name}</p>}
                       </div>
 
-                      {/* Phone */}
                       <div>
                         <label className="block text-sm font-medium text-white mb-2">Mobile Number (WhatsApp) *</label>
                         <div className="relative">
@@ -224,7 +177,6 @@ export function RegisterSection() {
                         {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone}</p>}
                       </div>
 
-                      {/* City + Age */}
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-white mb-2">Your City *</label>
@@ -252,7 +204,6 @@ export function RegisterSection() {
                         </div>
                       </div>
 
-                      {/* Submit */}
                       <Button
                         type="submit"
                         disabled={step === 'submitting'}
@@ -260,7 +211,7 @@ export function RegisterSection() {
                       >
                         {step === 'submitting' ? (
                           <span className="flex items-center gap-3">
-                            <span className="h-5 w-5 rounded-full border-2 border-background border-t-transparent animate-spin"></span>
+                            <span className="h-5 w-5 rounded-full border-2 border-background border-t-transparent animate-spin" />
                             Activating Your Profile...
                           </span>
                         ) : (

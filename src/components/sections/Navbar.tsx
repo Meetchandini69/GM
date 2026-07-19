@@ -3,13 +3,16 @@ import { Crown, Menu, X, LogIn, KeyRound } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { useLocation } from 'wouter';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [loginData, setLoginData] = useState({ phone: '', password: '' });
-  const [loginStep, setLoginStep] = useState<'form' | 'submitting' | 'success'>('form');
+  const [loginStep, setLoginStep] = useState<'form' | 'submitting' | 'error'>('form');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [, navigate] = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -37,16 +40,36 @@ export function Navbar() {
     scrollTo(href);
   };
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginStep('submitting');
-    setTimeout(() => setLoginStep('success'), 1200);
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mobile: loginData.phone, password: loginData.password }),
+        credentials: 'include',
+      });
+      if (res.ok) {
+        setIsLoginOpen(false);
+        navigate('/dashboard');
+      } else {
+        const data = await res.json();
+        setErrorMsg(data.error || 'Invalid credentials');
+        setLoginStep('error');
+      }
+    } catch {
+      setErrorMsg('Connection error. Please try again.');
+      setLoginStep('error');
+    }
   };
 
   const openLogin = (e: React.MouseEvent) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
     setLoginStep('form');
+    setErrorMsg('');
     setLoginData({ phone: '', password: '' });
     setIsLoginOpen(true);
   };
@@ -138,7 +161,7 @@ export function Navbar() {
       </header>
 
       {/* Login Modal */}
-      <Dialog open={isLoginOpen} onOpenChange={(open) => { setIsLoginOpen(open); if (!open) setLoginStep('form'); }}>
+      <Dialog open={isLoginOpen} onOpenChange={(open) => { setIsLoginOpen(open); if (!open) { setLoginStep('form'); setErrorMsg(''); } }}>
         <DialogContent className="sm:max-w-sm bg-card border-white/10">
           <DialogHeader>
             <DialogTitle className="font-serif text-xl flex items-center gap-2 text-white">
@@ -147,69 +170,58 @@ export function Navbar() {
             </DialogTitle>
           </DialogHeader>
 
-          {loginStep === 'success' ? (
-            <div className="flex flex-col items-center text-center py-6 gap-4">
-              <div className="w-16 h-16 rounded-full bg-green-500/20 border-2 border-green-500/40 flex items-center justify-center">
-                <LogIn className="w-8 h-8 text-green-400" />
-              </div>
-              <div>
-                <p className="text-white font-semibold text-lg">Logging you in...</p>
-                <p className="text-muted-foreground text-sm mt-1">Redirecting to your dashboard shortly.</p>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4 py-2">
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Registered Mobile Number</label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-medium">+91</span>
-                  <Input
-                    type="tel"
-                    placeholder="10-digit number"
-                    value={loginData.phone}
-                    onChange={e => setLoginData(p => ({ ...p, phone: e.target.value.replace(/\D/g, '').slice(0, 10) }))}
-                    className="h-12 bg-background border-white/10 text-white placeholder:text-muted-foreground focus:border-primary pl-12"
-                    required
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-white mb-2">Password</label>
+          <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4 py-2">
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Registered Mobile Number</label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm font-medium">+91</span>
                 <Input
-                  type="password"
-                  placeholder="Enter your password"
-                  value={loginData.password}
-                  onChange={e => setLoginData(p => ({ ...p, password: e.target.value }))}
-                  className="h-12 bg-background border-white/10 text-white placeholder:text-muted-foreground focus:border-primary"
+                  type="tel"
+                  placeholder="10-digit number"
+                  value={loginData.phone}
+                  onChange={e => setLoginData(p => ({ ...p, phone: e.target.value.replace(/\D/g, '').slice(0, 10) }))}
+                  className="h-12 bg-background border-white/10 text-white placeholder:text-muted-foreground focus:border-primary pl-12"
                   required
                 />
               </div>
-              <Button
-                type="submit"
-                disabled={loginStep === 'submitting'}
-                className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold mt-1"
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Password</label>
+              <Input
+                type="password"
+                placeholder="Enter your password"
+                value={loginData.password}
+                onChange={e => setLoginData(p => ({ ...p, password: e.target.value }))}
+                className="h-12 bg-background border-white/10 text-white placeholder:text-muted-foreground focus:border-primary"
+                required
+              />
+            </div>
+            {errorMsg && (
+              <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-md px-3 py-2">{errorMsg}</p>
+            )}
+            <Button
+              type="submit"
+              disabled={loginStep === 'submitting'}
+              className="w-full h-12 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold mt-1"
+            >
+              {loginStep === 'submitting' ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 rounded-full border-2 border-background border-t-transparent animate-spin" />
+                  Signing in...
+                </span>
+              ) : 'Login to My Account'}
+            </Button>
+            <p className="text-center text-xs text-muted-foreground">
+              Not registered yet?{' '}
+              <button
+                type="button"
+                onClick={() => { setIsLoginOpen(false); setTimeout(() => scrollTo('#register'), 100); }}
+                className="text-primary hover:underline font-medium"
               >
-                {loginStep === 'submitting' ? (
-                  <span className="flex items-center gap-2">
-                    <span className="h-4 w-4 rounded-full border-2 border-background border-t-transparent animate-spin"></span>
-                    Signing in...
-                  </span>
-                ) : (
-                  'Login to My Account'
-                )}
-              </Button>
-              <p className="text-center text-xs text-muted-foreground">
-                Not registered yet?{' '}
-                <button
-                  type="button"
-                  onClick={() => { setIsLoginOpen(false); setTimeout(() => scrollTo('#register'), 100); }}
-                  className="text-primary hover:underline font-medium"
-                >
-                  Create free account →
-                </button>
-              </p>
-            </form>
-          )}
+                Create free account →
+              </button>
+            </p>
+          </form>
         </DialogContent>
       </Dialog>
     </>
