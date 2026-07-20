@@ -2,7 +2,32 @@ import express from 'express';
 import session from 'express-session';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
+import multer from 'multer';
+import { mkdirSync } from 'fs';
+import path from 'path';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 import db from './db.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const UPLOADS_DIR = path.join(__dirname, '../uploads');
+mkdirSync(UPLOADS_DIR, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname) || '.jpg';
+    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`);
+  },
+});
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) cb(null, true);
+    else cb(new Error('Only image files are allowed'));
+  },
+});
 
 const app = express();
 const PORT = 3001;
@@ -21,6 +46,9 @@ const TG_TOKEN       = process.env.TG_TOKEN;
 const TG_CHAT        = process.env.TG_CHAT;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const SESSION_SECRET = process.env.SESSION_SECRET;
+
+// ── Static uploads ────────────────────────────────────────────────────────
+app.use('/uploads', express.static(UPLOADS_DIR));
 
 // ── Middleware ─────────────────────────────────────────────────────────────
 app.use(cors({ origin: true, credentials: true }));
@@ -147,6 +175,55 @@ app.post('/api/admin/logout', (req, res) => {
 // ══════════════════════════════════════════════════════════════════════════
 //  USER ROUTES
 // ══════════════════════════════════════════════════════════════════════════
+
+// Photo upload
+app.post('/api/user/upload-photo', requireUser, upload.single('photo'), (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file received' });
+  const url = `/uploads/${req.file.filename}`;
+  // Save to profile immediately
+  db.prepare(`
+    INSERT INTO profiles (user_id, photo_url) VALUES (?, ?)
+    ON CONFLICT(user_id) DO UPDATE SET photo_url = excluded.photo_url, updated_at = datetime('now')
+  `).run(req.session.userId, url);
+  res.json({ ok: true, url });
+});
+
+// Available women (not yet swiped by this user)
+app.get('/api/user/women', requireUser, (req, res) => {
+  const rows = db.prepare(`
+    SELECT w.* FROM women w
+    WHERE w.is_active = 1
+      AND w.id NOT IN (
+        SELECT woman_id FROM swipe_actions WHERE user_id = ?
+      )
+    ORDER BY w.id
+  `).all(req.session.userId);
+  res.json(rows);
+});
+
+// Record a swipe
+app.post('/api/user/swipe', requireUser, (req, res) => {
+  const { woman_id, action } = req.body;
+  if (!woman_id || !['like', 'pass'].includes(action)) {
+    return res.status(400).json({ error: 'Invalid swipe data' });
+  }
+  db.prepare(`
+    INSERT OR IGNORE INTO swipe_actions (user_id, woman_id, action) VALUES (?, ?, ?)
+  `).run(req.session.userId, woman_id, action);
+  res.json({ ok: true });
+});
+
+// Swipe history
+app.get('/api/user/swipe-history', requireUser, (req, res) => {
+  const rows = db.prepare(`
+    SELECT w.*, sa.action, sa.created_at as swiped_at
+    FROM swipe_actions sa
+    JOIN women w ON w.id = sa.woman_id
+    WHERE sa.user_id = ?
+    ORDER BY sa.created_at DESC
+  `).all(req.session.userId);
+  res.json(rows);
+});
 
 app.get('/api/user/profile', requireUser, (req, res) => {
   const profile = db.prepare(`

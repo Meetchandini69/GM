@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, Link } from 'wouter';
 import {
   Crown, CheckCircle, User, FileText, LogOut,
-  Edit2, Save, Camera, Phone, Mail, MapPin,
-  Calendar, Ruler, Weight, AlertCircle, Clock
+  Edit2, Save, Phone, Mail, MapPin,
+  Calendar, Ruler, Weight, AlertCircle, Clock, Heart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { motion } from 'framer-motion';
+import PhotoUploader from '@/components/PhotoUploader';
+import WomenTab from '@/components/WomenTab';
 
 type Profile = {
   user_id?: number;
@@ -59,7 +61,7 @@ export default function Dashboard() {
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [saveMsg, setSaveMsg] = useState('');
-  const [activeTab, setActiveTab] = useState<'overview' | 'profile'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'profile' | 'women'>('overview');
 
   useEffect(() => {
     fetchProfile();
@@ -268,16 +270,28 @@ export default function Dashboard() {
         </motion.div>
 
         {/* ── Tabs ─────────────────────────────────────────────────────────── */}
-        <div className="flex gap-2 mb-6">
-          {(['overview', 'profile'] as const).map(tab => (
+        <div className="flex gap-2 mb-6 flex-wrap">
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === 'overview' ? 'bg-primary text-black' : 'bg-white/5 text-muted-foreground hover:bg-white/10'}`}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('profile')}
+            className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === 'profile' ? 'bg-primary text-black' : 'bg-white/5 text-muted-foreground hover:bg-white/10'}`}
+          >
+            My Profile
+          </button>
+          {profile.member_status === 'active' && (
             <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === tab ? 'bg-primary text-black' : 'bg-white/5 text-muted-foreground hover:bg-white/10'}`}
+              onClick={() => setActiveTab('women')}
+              className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold transition-colors ${activeTab === 'women' ? 'bg-primary text-black' : 'bg-white/5 text-muted-foreground hover:bg-white/10'}`}
             >
-              {tab === 'overview' ? 'Overview' : 'My Profile'}
+              <Heart className="w-3.5 h-3.5" />
+              Available Women
             </button>
-          ))}
+          )}
         </div>
 
         {/* ── Overview Tab ─────────────────────────────────────────────────── */}
@@ -397,34 +411,24 @@ export default function Dashboard() {
               )}
 
               {/* Photo */}
-              <div className="flex items-center gap-4 mb-8 p-4 bg-background rounded-xl border border-white/10">
-                <div className="w-20 h-20 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center shrink-0">
-                  {profile.photo_url
-                    ? <img src={profile.photo_url} alt="Profile" className="w-full h-full object-cover rounded-full" />
-                    : <User className="w-10 h-10 text-primary" />
-                  }
-                </div>
-                <div>
-                  <p className="text-white font-semibold">{profile.full_name || 'Your Name'}</p>
-                  <p className="text-muted-foreground text-sm">+91 {profile.mobile}</p>
-                  {editing && (
-                    <div className="mt-2">
-                      <label className="text-xs text-muted-foreground block mb-1">Photo URL</label>
-                      <Input
-                        placeholder="https://... (paste image URL)"
-                        value={profile.photo_url || ''}
-                        onChange={e => update('photo_url', e.target.value)}
-                        className="h-8 text-xs bg-card border-white/10 text-white w-64"
-                      />
-                    </div>
-                  )}
+              <div className="mb-8 p-4 bg-background rounded-xl border border-white/10">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 border-2 border-primary/40 flex items-center justify-center shrink-0">
+                    {profile.photo_url
+                      ? <img src={profile.photo_url} alt="Profile" className="w-full h-full object-cover rounded-full" />
+                      : <User className="w-6 h-6 text-primary" />
+                    }
+                  </div>
+                  <div>
+                    <p className="text-white font-semibold">{profile.full_name || 'Your Name'}</p>
+                    <p className="text-muted-foreground text-sm">+91 {profile.mobile}</p>
+                  </div>
                 </div>
                 {editing && (
-                  <div className="ml-auto">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-                      <Camera className="w-5 h-5 text-primary" />
-                    </div>
-                  </div>
+                  <PhotoUploader
+                    currentUrl={profile.photo_url}
+                    onUploadSuccess={url => update('photo_url', url)}
+                  />
                 )}
               </div>
 
@@ -619,6 +623,13 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+          </motion.div>
+        )}
+
+        {/* ── Available Women Tab ──────────────────────────────────────────── */}
+        {activeTab === 'women' && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            <WomenTab />
           </motion.div>
         )}
       </div>
